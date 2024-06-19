@@ -1,0 +1,25 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "recmd"
+version = "0.0.1"
+description = "Inspired by zx command constructor"
+readme = "README.md"
+authors = [{ name = "Ivan Vozhakov", email = "gou177@bk.ru" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["command", "shell", "subprocess"]
+dependencies = []
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+async = ["asyncio"]
+
+[project.urls]
+Homepage = "https://github.com/gou177/recmd"
