@@ -12,7 +12,6 @@ from typing import (
     overload,
 )
 
-import anyio
 
 if TYPE_CHECKING:
     from anyio.abc import AnyByteReceiveStream, AnyByteSendStream
@@ -118,6 +117,8 @@ class Pipe(DescriptorReference):
         self._running = True
         async with self.async_read, self.async_write:
             while True:
+                import anyio
+
                 try:
                     value = await self.async_read.receive()
                 except anyio.EndOfStream:
