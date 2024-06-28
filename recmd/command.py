@@ -133,6 +133,7 @@ class Command[IN: AnyStream, OUT: AnyStream, ERR: AnyStream]:
         self._assert_not_started()
         self.environment.update(env)
         self.environment.update(kwargs)
+        return self
 
     def _assert_not_started(self):
         assert not self.did_start(), "Unable to change started command"
