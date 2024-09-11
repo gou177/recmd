@@ -83,6 +83,11 @@ def apply_ast(function: Callable, module: ast.Module):
     """Update __code__ of function inplace"""
     consts = compile(module, inspect.getfile(function), "exec").co_consts
     code = None
+    # fix for inline generics (def name[T])
+    for const in consts:
+        if isinstance(const, types.CodeType) and const.co_name.startswith("<"):
+            consts = consts + const.co_consts
+
     for const in consts:
         if (
             isinstance(const, types.CodeType)
