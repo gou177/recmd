@@ -30,6 +30,7 @@ class AnyioExecutor(AsyncExecutor):
                 stderr=stderr,
                 env=env,
                 cwd=command.cwd,
+                **command.options,
             )
 
             command.running = RunningCommand(process.pid, process)

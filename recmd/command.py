@@ -27,10 +27,11 @@ class Command[IN: AnyStream, OUT: AnyStream, ERR: AnyStream]:
         stderr: ERR = None,
         inherit_env: bool = True,
         env: dict[str, str] | None = None,
+        options: dict[str, Any] | None = None,
     ) -> None:
-        assert isinstance(
-            cmd, list
-        ), "apply @sh decorator to function containing this statement"
+        assert isinstance(cmd, list), (
+            "apply @sh decorator to function containing this statement"
+        )
         self.cmd = cmd
         self.stdin = stdin
         self.stdout = stdout
@@ -38,6 +39,7 @@ class Command[IN: AnyStream, OUT: AnyStream, ERR: AnyStream]:
         self.cwd = None
         self.inherit_env = inherit_env
         self.environment = env or {}
+        self.options = options or {}
 
     def did_start(self):
         return hasattr(self, "running")
@@ -161,6 +163,11 @@ class Command[IN: AnyStream, OUT: AnyStream, ERR: AnyStream]:
 
     def with_cwd(self, cwd: str | PurePath | None):
         self.cwd = cwd
+        return self
+
+    def with_options(self, options: dict = {}, **kwargs):
+        self.options.update(options)
+        self.options.update(kwargs)
         return self
 
     def __rshift__[_PI: AnyStream, _PE: AnyStream, _NO: AnyStream](
