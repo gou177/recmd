@@ -11,6 +11,8 @@ With async support: `pip install recmd[async]`
 
 #### Convert formatted strings to argument lists
 
+
+Using ast transformation (python 3.12+):
 ```py
 from recmd import shell, sh
 
@@ -20,14 +22,29 @@ def argument_list(value: str, *args):
     # :*!s converts args into `*[f"{x!s}" for x in args]`
     # if !s is omitted then it turned into just `*args`
     # you can also add any python format after :* (:*:.2f)
-  
+
 assert argument_list("test asd", 1, 2, 3) == [
     "executable", "arguments", "--value", "test asd", "more arguments with test asd", "1", "2", "3"
 ]
 ```
 
+Using template strings (python 3.14+):
+```py
+from recmd import shell
+
+def argument_list(value: str, *args):
+    return shell(t"executable arguments --value {value} 'more arguments with {value}' {args:*!s}")
+    # :*!s converts args into `*[f"{x!s}" for x in args]`
+    # if !s is omitted then it turned into just `*args`
+    # you can also add any python format after :* (:*:.2f)
+
+assert argument_list("test asd", 1, 2, 3) == [
+    "executable", "arguments", "--value", "test asd", "more arguments with test asd", "1", "2", "3"
+]
+```
 #### Constructing commands
 
+Using ast transformation (python 3.12+):
 ```py
 import sys
 from recmd.shell import sh
@@ -35,6 +52,16 @@ from recmd.shell import sh
 @sh
 def python(code: str, *args):
     return sh(f"{sys.executable} -c {code} {args:*}")
+
+```
+
+Using template strings (python 3.14+):
+```py
+import sys
+from recmd.shell import sh
+
+def python(code: str, *args):
+    return sh(t"{sys.executable} -c {code} {args:*}")
 
 ```
 
